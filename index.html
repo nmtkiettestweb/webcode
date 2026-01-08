@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lấy Mã Code Nạp Coin</title>
+    <title>Get Coin</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -19,65 +19,92 @@
         }
         .container {
             background-color: #1e293b;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             text-align: center;
             width: 100%;
             max-width: 400px;
+            border: 1px solid #334155;
         }
-        h1 { font-size: 1.5rem; margin-bottom: 1rem; color: #38bdf8; }
-        p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem; }
+        h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: #38bdf8; }
+        p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.5; }
         .code-box {
             background-color: #0f172a;
-            padding: 1rem;
-            border-radius: 0.5rem;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
             border: 2px dashed #38bdf8;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            color: #f8fafc;
+            word-break: break-all;
         }
-        .code-box:active { transform: scale(0.95); }
         .btn-copy {
-            background-color: #38bdf8;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
             color: #0f172a;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
-            transition: background 0.2s;
+            text-transform: uppercase;
+            transition: all 0.3s;
         }
-        .btn-copy:hover { background-color: #7dd3fc; }
-        .footer { margin-top: 1.5rem; font-size: 0.8rem; color: #64748b; }
+        .btn-copy:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4); }
+        .btn-copy:active { transform: translateY(0); }
+        .footer { margin-top: 2rem; font-size: 0.85rem; color: #64748b; }
+        .error-msg { color: #f43f5e; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Chúc mừng!</h1>
-    <p>Bạn đã vượt link thành công. Dưới đây là mã code của bạn:</p>
+    <h1>Thành Công!</h1>
+    <p>Bạn đã hoàn thành vượt link. Đây là mã code của bạn:</p>
     
-    <div class="code-box" id="codeText">COIN888</div>
+    <div class="code-box" id="codeDisplay">ĐANG TẢI...</div>
     
-    <button class="btn-copy" onclick="copyCode()">SAO CHÉP MÃ</button>
+    <button class="btn-copy" id="copyBtn" onclick="copyCode()">Sao chép mã</button>
 
     <div class="footer">
-        Quay lại Discord và dùng lệnh <b>/nap</b> để nhận coin.
+        Quay lại Discord, nhấn nút <b>Nhập Mã Code</b> để nhận thưởng.
     </div>
 </div>
 
 <script>
-    function copyCode() {
-        const code = document.getElementById('codeText').innerText;
-        navigator.clipboard.writeText(code).then(() => {
-            alert("Đã sao chép mã: " + code);
-        });
+    // Hàm lấy tham số từ URL (?code=...)
+    function getCodeFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const displayElement = document.getElementById('codeDisplay');
+        const copyButton = document.getElementById('copyBtn');
+
+        if (code) {
+            displayElement.innerText = code.toUpperCase();
+        } else {
+            displayElement.innerText = "KHÔNG CÓ MÃ";
+            displayElement.classList.add("error-msg");
+            copyButton.style.display = "none";
+        }
     }
+
+    // Hàm sao chép mã
+    function copyCode() {
+        const code = document.getElementById('codeDisplay').innerText;
+        if (code !== "KHÔNG CÓ MÃ" && code !== "ĐANG TẢI...") {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerText = "ĐÃ SAO CHÉP!";
+                setTimeout(() => { btn.innerText = "SAO CHÉP MÃ"; }, 2000);
+            });
+        }
+    }
+
+    // Chạy hàm khi trang web tải xong
+    window.onload = getCodeFromURL;
 </script>
 
 </body>
