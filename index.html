@@ -3,108 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Coin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>Xác Minh Hệ Thống</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #7289da;
+            --secondary: #43b581;
+            --bg: #2f3136;
+            --card: #36393f;
+            --text: #ffffff;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            padding: 20px;
+            background: radial-gradient(circle at top right, #36393f, #202225);
         }
+
         .container {
-            background-color: #1e293b;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            text-align: center;
+            background: var(--card);
             width: 100%;
             max-width: 400px;
-            border: 1px solid #334155;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
         }
-        h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: #38bdf8; }
-        p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.5; }
-        .code-box {
-            background-color: #0f172a;
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-            border: 2px dashed #38bdf8;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 3px;
-            margin-bottom: 1.5rem;
-            color: #f8fafc;
-            word-break: break-all;
+
+        .icon-header {
+            font-size: 50px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
         }
-        .btn-copy {
-            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
-            color: #0f172a;
+
+        h2 { margin: 0 0 10px; font-size: 22px; }
+        p { color: #b9bbbe; font-size: 14px; margin-bottom: 30px; }
+
+        /* Thanh tiến trình Neon */
+        .progress-box {
+            background: #202225;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #7289da, #94a5e6);
+            width: 0%;
+            height: 100%;
+            box-shadow: 0 0 15px rgba(114, 137, 218, 0.5);
+            transition: width 0.3s ease;
+        }
+
+        /* Nút bấm hiện đại */
+        .btn {
+            background: var(--primary);
+            color: white;
             border: none;
-            padding: 1rem;
-            border-radius: 0.75rem;
-            font-weight: 700;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
             cursor: pointer;
             width: 100%;
+            transition: all 0.3s ease;
+            display: none;
             text-transform: uppercase;
-            transition: all 0.3s;
+            letter-spacing: 1px;
         }
-        .btn-copy:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4); }
-        .btn-copy:active { transform: translateY(0); }
-        .footer { margin-top: 2rem; font-size: 0.85rem; color: #64748b; }
-        .error-msg { color: #f43f5e; font-weight: bold; }
+
+        .btn:hover {
+            background: #5b6eae;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Khung hiển thị Code */
+        #code-box {
+            display: none;
+            margin-top: 10px;
+            padding: 20px;
+            background: #2f3136;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--secondary);
+            cursor: pointer;
+            letter-spacing: 3px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        #code-box:active { transform: scale(0.95); }
+
+        .copy-hint {
+            font-size: 11px;
+            color: #72767d;
+            margin-top: 8px;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Thành Công!</h1>
-    <p>Bạn đã hoàn thành vượt link. Đây là mã code của bạn:</p>
-    
-    <div class="code-box" id="codeDisplay">ĐANG TẢI...</div>
-    
-    <button class="btn-copy" id="copyBtn" onclick="copyCode()">Sao chép mã</button>
-
-    <div class="footer">
-        Quay lại Discord, nhấn nút <b>Nhập Mã Code</b> để nhận thưởng.
+    <div class="icon-header">
+        <i class="fas fa-user-shield" id="main-icon"></i>
     </div>
+    
+    <h2 id="title">Hệ Thống Xác Minh</h2>
+    <p id="desc">Vui lòng chờ trong giây lát để hệ thống kiểm tra an toàn.</p>
+
+    <div class="progress-box" id="p-box">
+        <div class="progress-bar" id="p-bar"></div>
+    </div>
+
+    <button class="btn" id="v-btn" onclick="startReveal()">
+        <i class="fas fa-check-circle"></i> Tôi không phải robot
+    </button>
+
+    <div id="code-box" onclick="copyCode()">MÃ CỦA BẠN</div>
+    <div class="copy-hint" id="c-hint">Chạm vào mã để sao chép nhanh</div>
 </div>
 
 <script>
-    // Hàm lấy tham số từ URL (?code=...)
-    function getCodeFromURL() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const displayElement = document.getElementById('codeDisplay');
-        const copyButton = document.getElementById('copyBtn');
+    const params = new URLSearchParams(window.location.search);
+    const v = params.get('v');
+    const ref = document.referrer.toLowerCase();
+    
+    // Kiểm tra nguồn
+    const isOk = v && (ref.includes("yeumoney") || ref.includes("yeulink") || ref.includes("discord"));
 
-        if (code) {
-            displayElement.innerText = code.toUpperCase();
-        } else {
-            displayElement.innerText = "KHÔNG CÓ MÃ";
-            displayElement.classList.add("error-msg");
-            copyButton.style.display = "none";
-        }
+    if (!isOk) {
+        document.getElementById('title').innerText = "Truy cập bị chặn";
+        document.getElementById('desc').innerText = "Bạn phải đi qua link rút gọn chính thức để lấy mã.";
+        document.getElementById('main-icon').className = "fas fa-user-slash";
+        document.getElementById('main-icon').style.color = "#f04747";
+    } else {
+        // Chạy thanh tiến trình
+        document.getElementById('p-box').style.display = "block";
+        let width = 0;
+        const interval = setInterval(() => {
+            width += Math.random() * 8;
+            if (width >= 100) {
+                width = 100;
+                clearInterval(interval);
+                showButton();
+            }
+            document.getElementById('p-bar').style.width = width + "%";
+        }, 300);
     }
 
-    // Hàm sao chép mã
+    function showButton() {
+        document.getElementById('p-box').style.display = "none";
+        document.getElementById('v-btn').style.display = "block";
+        document.getElementById('desc').innerText = "Xác minh hoàn tất. Hãy nhấn nút bên dưới.";
+    }
+
+    function startReveal() {
+        document.getElementById('v-btn').style.display = "none";
+        document.getElementById('title').innerText = "Mã xác nhận của bạn";
+        document.getElementById('desc').innerText = "Dán mã này vào Bot để nhận coin.";
+        
+        const codeBox = document.getElementById('code-box');
+        codeBox.innerText = atob(v);
+        codeBox.style.display = "block";
+        document.getElementById('c-hint').style.display = "block";
+        document.getElementById('main-icon').className = "fas fa-unlock-alt";
+    }
+
     function copyCode() {
-        const code = document.getElementById('codeDisplay').innerText;
-        if (code !== "KHÔNG CÓ MÃ" && code !== "ĐANG TẢI...") {
-            navigator.clipboard.writeText(code).then(() => {
-                const btn = document.getElementById('copyBtn');
-                btn.innerText = "ĐÃ SAO CHÉP!";
-                setTimeout(() => { btn.innerText = "SAO CHÉP MÃ"; }, 2000);
-            });
-        }
+        const text = document.getElementById('code-box').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("✅ Đã sao chép mã thành công!");
+        });
     }
-
-    // Chạy hàm khi trang web tải xong
-    window.onload = getCodeFromURL;
 </script>
 
 </body>
